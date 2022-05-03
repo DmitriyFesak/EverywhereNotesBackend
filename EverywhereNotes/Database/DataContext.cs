@@ -1,4 +1,4 @@
-﻿using EverywhereNotes.Models;
+﻿using EverywhereNotes.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EverywhereNotes.Database
@@ -11,5 +11,6 @@ namespace EverywhereNotes.Database
         }
 
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

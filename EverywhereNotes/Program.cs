@@ -1,5 +1,7 @@
 using EverywhereNotes.Database;
 using EverywhereNotes.Options;
+using EverywhereNotes.Repositories;
+using EverywhereNotes.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,6 +57,10 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer"
     });
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

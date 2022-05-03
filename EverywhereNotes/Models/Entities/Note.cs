@@ -1,6 +1,6 @@
-﻿namespace EverywhereNotes.Models
+﻿namespace EverywhereNotes.Models.Entities
 {
-    public class Note
+    public class Note : IEntity
     {
         public long Id { get; init; }
 
