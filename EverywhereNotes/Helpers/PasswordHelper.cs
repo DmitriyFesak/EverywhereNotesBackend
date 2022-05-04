@@ -10,7 +10,6 @@ namespace EverywhereNotes.Helpers
         /// At least eight characters, at least one uppercase letter, one lowercase letter one number and special character
         /// </summary>
         private const string _pattern = @"^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_!%^&-+()*=])(?=.*[0-9]).*$";
-        private static readonly int _saltLen = 32;
 
         public static string GenerateSalt()
         {
