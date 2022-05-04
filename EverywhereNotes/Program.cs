@@ -1,4 +1,5 @@
 using EverywhereNotes.Database;
+using EverywhereNotes.Helpers;
 using EverywhereNotes.Options;
 using EverywhereNotes.Repositories;
 using EverywhereNotes.Services;
@@ -61,6 +62,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<TokenHelper>();
 
 var app = builder.Build();
 

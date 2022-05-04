@@ -1,7 +1,6 @@
-﻿using EverywhereNotes.Contracts;
-using EverywhereNotes.Contracts.Requests;
+﻿using EverywhereNotes.Contracts.Requests;
+using EverywhereNotes.Extensions;
 using EverywhereNotes.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EverywhereNotes.Controllers
@@ -24,7 +23,7 @@ namespace EverywhereNotes.Controllers
         {
             var response = await _userService.RegisterUserAsync(request);
 
-            return Ok();
+            return response.ToActionResult();
         }
     }
 }

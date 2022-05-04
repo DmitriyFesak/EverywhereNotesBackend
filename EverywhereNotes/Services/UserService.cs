@@ -1,5 +1,6 @@
 ﻿using EverywhereNotes.Contracts.Requests;
-using EverywhereNotes.Models;
+using EverywhereNotes.Contracts.Responses;
+using EverywhereNotes.Helpers;
 using EverywhereNotes.Models.Entities;
 using EverywhereNotes.Models.ResultModel;
 using EverywhereNotes.Repositories;
@@ -9,35 +10,52 @@ namespace EverywhereNotes.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly TokenHelper _tokenHelper;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, TokenHelper tokenHelper)
         {
             _unitOfWork = unitOfWork;
+            _tokenHelper = tokenHelper;
         }
 
-        public async Task<Result<AuthenticationResult>> RegisterUserAsync(UserRegistrationRequest request)
+        public async Task<Result<AuthSuccessResponse>> RegisterUserAsync(UserRegistrationRequest request)
         {
             var isEmailTaken = await _unitOfWork.UserRepository.IsEmailTakenAsync(request.Email);
 
             if (isEmailTaken)
             {
-                return Result<AuthenticationResult>.GetError(ErrorCode.Conflict, "This email is already used!");
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.Conflict, "This email is already used!");
             }
 
-            /*try
+            //TODO: Get rid of this after adding validation
+            if (request.Password != request.ConfirmPassword)
+            {
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.Conflict, "Passwords do not match!");
+            }
+
+            try
             {
                 var user = new User
                 {
                     Email = request.Email,
-                    Password = request.Password
                 };
 
+                user.Salt = PasswordHelper.GenerateSalt();
+                user.Password = PasswordHelper.HashPassword(request.Password, user.Salt);
 
-            }*/
-            return Result<AuthenticationResult>.GetSuccess(new AuthenticationResult() 
+                await _unitOfWork.UserRepository.AddAsync(user);
+                await _unitOfWork.CommitAsync();
+
+                var token = _tokenHelper.GenerateToken(user);
+
+                return Result<AuthSuccessResponse>.GetSuccess(new AuthSuccessResponse { Token = token });
+            }
+            catch
             {
-                Success = true
-            });
+                _unitOfWork.Rollback();
+
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.InternalServerError, "Cannot create account.");
+            }
         }
     }
 }

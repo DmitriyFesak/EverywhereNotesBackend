@@ -1,11 +1,10 @@
 ﻿using EverywhereNotes.Database;
 using EverywhereNotes.Models.Entities;
-using EverywhereNotes.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace EverywhereNotes.Repositories
 {
-    public class UserRepository : BaseRepository, IUserRepository
+    public class UserRepository : IUserRepository
     {
         private DataContext _dataContext;
 
@@ -14,27 +13,27 @@ namespace EverywhereNotes.Repositories
             _dataContext = dataContext;
         }
 
-        public override Task AddAsync(IEntity entity)
+        public async Task AddAsync(User user)
+        {
+            await _dataContext.Users.AddAsync(user);
+        }
+
+        public Task DeleteAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public override Task DeleteAsync(long id)
+        public Task<List<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public override Task<List<IEntity>> GetAllAsync()
+        public Task<User> GetByIdAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public override Task<IEntity> GetByIdAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IQueryable<IEntity> GetQueryableNoTracking()
+        public IQueryable<User> GetQueryableNoTracking()
         {
             throw new NotImplementedException();
         }
@@ -44,12 +43,7 @@ namespace EverywhereNotes.Repositories
             return await _dataContext.Users.AnyAsync(user => user.Email == email);
         }
 
-        public override Task<bool> IsEntityExistAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task UpdateAsync(IEntity entity)
+        public Task UpdateAsync(User user)
         {
             throw new NotImplementedException();
         }

@@ -1,11 +1,11 @@
 ﻿using EverywhereNotes.Contracts.Requests;
-using EverywhereNotes.Models;
+using EverywhereNotes.Contracts.Responses;
 using EverywhereNotes.Models.ResultModel;
 
 namespace EverywhereNotes.Services
 {
     public interface IUserService
     {
-        public Task<Result<AuthenticationResult>> RegisterUserAsync(UserRegistrationRequest request);
+        public Task<Result<AuthSuccessResponse>> RegisterUserAsync(UserRegistrationRequest request);
     }
 }
