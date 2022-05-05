@@ -18,24 +18,35 @@ namespace EverywhereNotes.Repositories
             await _dataContext.Users.AddAsync(user);
         }
 
-        public Task DeleteAsync(long id)
+        public async Task DeleteAsync(long id)
         {
-            throw new NotImplementedException();
+            var userToDelete = await _dataContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (userToDelete != null)
+            {
+                _dataContext.Users.Remove(userToDelete);
+            }
         }
 
-        public Task<List<User>> GetAllAsync()
+        public async Task<User> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            return user;
         }
 
-        public Task<User> GetByIdAsync(long id)
+        public async Task<List<User>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var users = await _dataContext.Users.ToListAsync();
+
+            return users;
         }
 
-        public IQueryable<User> GetQueryableNoTracking()
+        public async Task<User> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            return user; 
         }
 
         public async Task<bool> IsEmailTakenAsync(string email)
@@ -43,9 +54,9 @@ namespace EverywhereNotes.Repositories
             return await _dataContext.Users.AnyAsync(user => user.Email == email);
         }
 
-        public Task UpdateAsync(User user)
+        public void Update(User user)
         {
-            throw new NotImplementedException();
+            _dataContext.Users.Update(user);
         }
     }
 }

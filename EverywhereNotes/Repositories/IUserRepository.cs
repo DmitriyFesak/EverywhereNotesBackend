@@ -6,16 +6,16 @@ namespace EverywhereNotes.Repositories
     {
         public Task<bool> IsEmailTakenAsync(string email);
 
-        public abstract Task AddAsync(User user);
+        public Task<User> GetByEmailAsync(string email);
 
-        public abstract Task DeleteAsync(long id);
+        public Task AddAsync(User user);
 
-        public abstract Task<List<User>> GetAllAsync();
+        public Task DeleteAsync(long id);
 
-        public abstract Task<User> GetByIdAsync(long id);
+        public Task<List<User>> GetAllAsync();
 
-        public abstract Task UpdateAsync(User user);
+        public Task<User> GetByIdAsync(long id);
 
-        public abstract IQueryable<User> GetQueryableNoTracking();
+        public void Update(User user);
     }
 }

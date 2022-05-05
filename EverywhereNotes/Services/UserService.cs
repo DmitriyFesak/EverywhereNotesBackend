@@ -18,7 +18,32 @@ namespace EverywhereNotes.Services
             _tokenHelper = tokenHelper;
         }
 
-        public async Task<Result<AuthSuccessResponse>> RegisterUserAsync(UserRegistrationRequest request)
+        public async Task<Result<AuthSuccessResponse>> AuthorizeAsync(UserAuthorizationRequest request)
+        {
+            var user = await _unitOfWork.UserRepository.GetByEmailAsync(request.Email);
+            
+            if (user == null)
+            {
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.NotFound, "User not found!");
+            }
+
+            var passwordHash = PasswordHelper.HashPassword(request.Password, user.Salt);
+
+            var isAuthorized = passwordHash == user.Password;
+
+            if (!isAuthorized)
+            {
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.Unauthorized, "Wrong password!");
+            }
+            else
+            {
+                var token = _tokenHelper.GenerateToken(user);
+
+                return Result<AuthSuccessResponse>.GetSuccess(new AuthSuccessResponse { Token = token });
+            }
+        }
+
+        public async Task<Result<AuthSuccessResponse>> RegisterAsync(UserRegistrationRequest request)
         {
             var isEmailTaken = await _unitOfWork.UserRepository.IsEmailTakenAsync(request.Email);
 

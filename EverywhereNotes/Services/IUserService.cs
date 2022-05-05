@@ -6,6 +6,7 @@ namespace EverywhereNotes.Services
 {
     public interface IUserService
     {
-        public Task<Result<AuthSuccessResponse>> RegisterUserAsync(UserRegistrationRequest request);
+        public Task<Result<AuthSuccessResponse>> RegisterAsync(UserRegistrationRequest request);
+        public Task<Result<AuthSuccessResponse>> AuthorizeAsync(UserAuthorizationRequest request);
     }
 }
