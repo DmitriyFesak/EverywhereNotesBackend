@@ -2,6 +2,7 @@
 using EverywhereNotes.Contracts.Responses;
 using EverywhereNotes.Extensions;
 using EverywhereNotes.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -35,6 +36,16 @@ namespace EverywhereNotes.Controllers
         {
             var response = await _userService.RegisterAsync(request);
 
+            return response.ToActionResult();
+        }
+
+        [Authorize]
+        [Route("password")]
+        [HttpPut]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var response = await _userService.ChangePasswordAsync(request);
+            
             return response.ToActionResult();
         }
     }

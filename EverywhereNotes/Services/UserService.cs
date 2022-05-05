@@ -1,5 +1,6 @@
 ﻿using EverywhereNotes.Contracts.Requests;
 using EverywhereNotes.Contracts.Responses;
+using EverywhereNotes.Extensions;
 using EverywhereNotes.Helpers;
 using EverywhereNotes.Models.Entities;
 using EverywhereNotes.Models.ResultModel;
@@ -11,11 +12,14 @@ namespace EverywhereNotes.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly TokenHelper _tokenHelper;
+        private readonly ICurrentUserService _currentUserService;
 
-        public UserService(IUnitOfWork unitOfWork, TokenHelper tokenHelper)
+        public UserService(IUnitOfWork unitOfWork, TokenHelper tokenHelper,
+            ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _tokenHelper = tokenHelper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result<AuthSuccessResponse>> AuthorizeAsync(UserAuthorizationRequest request)
@@ -41,6 +45,32 @@ namespace EverywhereNotes.Services
 
                 return Result<AuthSuccessResponse>.GetSuccess(new AuthSuccessResponse { Token = token });
             }
+        }
+
+        public async Task<Result<string>> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            if (request.NewPassword != request.ConfirmNewPassword)
+            {
+                return Result<string>.GetError(ErrorCode.ValidationError, "Passwords don't match!");
+            }
+
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(_currentUserService.UserId);
+
+            if (user.Password != PasswordHelper.HashPassword(request.OldPassword, user.Salt))
+            {
+                return Result<string>.GetError(ErrorCode.ValidationError, "Old password is wrong!");
+            }
+
+            user.Salt = PasswordHelper.GenerateSalt();
+
+            var newPasswordHash = PasswordHelper.HashPassword(request.NewPassword, user.Salt);
+
+            user.Password = newPasswordHash;
+
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.CommitAsync();
+
+            return Result<string>.GetSuccess("Password was changed!");
         }
 
         public async Task<Result<AuthSuccessResponse>> RegisterAsync(UserRegistrationRequest request)
