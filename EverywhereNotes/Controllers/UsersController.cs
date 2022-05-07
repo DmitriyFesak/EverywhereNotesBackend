@@ -1,10 +1,8 @@
 ﻿using EverywhereNotes.Contracts.Requests;
-using EverywhereNotes.Contracts.Responses;
 using EverywhereNotes.Extensions;
 using EverywhereNotes.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace EverywhereNotes.Controllers
 {
@@ -19,7 +17,6 @@ namespace EverywhereNotes.Controllers
             _userService = userService;
         }
 
-        [SwaggerResponse(200, type: typeof(AuthSuccessResponse))]
         [Route("authorize")]
         [HttpPost]
         public async Task<IActionResult> AuthorizeUser(UserAuthorizationRequest request)
@@ -29,7 +26,6 @@ namespace EverywhereNotes.Controllers
             return response.ToActionResult();
         }
 
-        [SwaggerResponse(200, type: typeof(AuthSuccessResponse))]
         [Route("register")]
         [HttpPost]
         public async Task<IActionResult> RegisterUser(UserRegistrationRequest request)

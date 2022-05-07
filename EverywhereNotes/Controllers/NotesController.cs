@@ -1,6 +1,7 @@
-﻿using EverywhereNotes.Database;
+﻿using EverywhereNotes.Contracts.Requests;
+using EverywhereNotes.Extensions;
 using EverywhereNotes.Models.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using EverywhereNotes.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,54 +12,67 @@ namespace EverywhereNotes.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private DataContext _dataContext;
-
-        public NotesController(DataContext dataContext)
+        private readonly INotesService _notesService;
+        
+        public NotesController(INotesService notesService)
         {
-            _dataContext = dataContext;
+            _notesService = notesService;
         }
 
-        // GET: api/<NotesController>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetAsync()
         {
-            var notes = _dataContext.Notes.ToList();
+            var notes = await _notesService.GetByUserIdAsync();
             
-            return Ok(notes);
+            return notes.ToActionResult();
         }
 
-        // GET api/<NotesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetByIdAsync(long id)
         {
-            return "value";
+            var note = await _notesService.GetByIdAsync(id);
+
+            return note.ToActionResult();
         }
 
-        // POST api/<NotesController>
         [HttpPost]
-        public IActionResult Post([FromBody] string value)
+        public async Task<IActionResult> PostAsync(CreateNoteRequest request)
         {
-            _dataContext.Add(new Note
-            {
-                Title = value,
-                Content = "zxc",
-                CreationDateTime = DateTime.Now
-            });
-            var saved = _dataContext.SaveChanges();
+            var note = await _notesService.AddAsync(request);
 
-            return Ok(saved > 0);
+            return note.ToActionResult();
         }
 
-        // PUT api/<NotesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> PutAsync(long id, [FromBody] UpdateNoteRequest request)
         {
+            var note = await _notesService.UpdateAsync(request);
+
+            return note.ToActionResult();
         }
 
-        // DELETE api/<NotesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPatch("trash/{id}")]
+        public async Task<IActionResult> MoveToTrashAsync(long id)
         {
+            var note = await _notesService.MoveToTrashAsync(id);
+
+            return note.ToActionResult();
+        }
+
+        [HttpPatch("restore/{id}")]
+        public async Task<IActionResult> MoveFromTrashAsync(long id)
+        {
+            var note = await _notesService.RestoreFromTrashAsync(id);
+
+            return note.ToActionResult();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(long id)
+        {
+            var note = await _notesService.DeleteAsync(id);
+
+            return note.ToActionResult();
         }
     }
 }

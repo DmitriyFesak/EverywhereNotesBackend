@@ -1,6 +1,5 @@
 ﻿using EverywhereNotes.Contracts.Requests;
 using EverywhereNotes.Contracts.Responses;
-using EverywhereNotes.Extensions;
 using EverywhereNotes.Helpers;
 using EverywhereNotes.Models.Entities;
 using EverywhereNotes.Models.ResultModel;

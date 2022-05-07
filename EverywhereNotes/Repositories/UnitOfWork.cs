@@ -7,6 +7,7 @@ namespace EverywhereNotes.Repositories
     {
         private readonly DataContext _dataContext;
         private IUserRepository _userRepository;
+        private INotesRepository _notesRepository;
 
         public UnitOfWork(DataContext dataContext)
         {
@@ -15,6 +16,9 @@ namespace EverywhereNotes.Repositories
 
         public IUserRepository UserRepository => _userRepository = _userRepository
             ?? new UserRepository(_dataContext);
+
+        public INotesRepository NotesRepository => _notesRepository = _notesRepository
+            ?? new NotesRepository(_dataContext);
 
         public IDbContextTransaction BeginTransaction()
         {
