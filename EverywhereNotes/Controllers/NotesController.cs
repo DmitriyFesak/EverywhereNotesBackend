@@ -1,6 +1,5 @@
 ﻿using EverywhereNotes.Contracts.Requests;
 using EverywhereNotes.Extensions;
-using EverywhereNotes.Models.Entities;
 using EverywhereNotes.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
