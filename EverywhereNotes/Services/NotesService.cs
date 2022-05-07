@@ -80,6 +80,20 @@ namespace EverywhereNotes.Services
             }
         }
 
+        public async Task<Result<List<NoteResponse>>> GetBinByUserIdAsync()
+        {
+            var userId = _currentUserService.UserId;
+
+            var foundNotes = await _unitOfWork.NotesRepository.GetBinByUserIdAsync(userId);
+
+            if (foundNotes == null || foundNotes.Count == 0)
+            {
+                return Result<List<NoteResponse>>.GetError(ErrorCode.NotFound, "Bin is empty!");
+            }
+
+            return Result<List<NoteResponse>>.GetSuccess(_mapper.Map<List<NoteResponse>>(foundNotes));
+        }
+
         public async Task<Result<NoteResponse>> GetByIdAsync(long id)
         {
             var foundNote = await _unitOfWork.NotesRepository.GetByIdAsync(id);

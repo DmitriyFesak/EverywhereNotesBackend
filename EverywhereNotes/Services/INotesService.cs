@@ -16,6 +16,8 @@ namespace EverywhereNotes.Services
 
         public Task<Result<NoteResponse>> UpdateAsync(long id, NoteRequest note);
 
+        public Task<Result<List<NoteResponse>>> GetBinByUserIdAsync();
+
         public Task<Result<NoteResponse>> MoveToBinAsync(long id);
         
         public Task<Result<NoteResponse>> RestoreFromBinAsync(long id);

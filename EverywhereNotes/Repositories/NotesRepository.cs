@@ -28,6 +28,13 @@ namespace EverywhereNotes.Repositories
             }
         }
 
+        public async Task<List<Note>> GetBinByUserIdAsync(long userId)
+        {
+            var notes = await _dataContext.Notes.Where(x => x.userId == userId && x.MovedToBin).ToListAsync();
+
+            return notes;
+        }
+
         public async Task<Note?> GetByIdAsync(long id)
         {
             var note = await _dataContext.Notes.FirstOrDefaultAsync(x => x.Id == id);
@@ -37,7 +44,7 @@ namespace EverywhereNotes.Repositories
 
         public async Task<List<Note>> GetByUserIdAsync(long userId)
         {
-            var notes = await _dataContext.Notes.Where(x => x.userId == userId).ToListAsync();
+            var notes = await _dataContext.Notes.Where(x => x.userId == userId && !x.MovedToBin).ToListAsync();
 
             return notes;
         }

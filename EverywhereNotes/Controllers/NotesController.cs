@@ -51,6 +51,14 @@ namespace EverywhereNotes.Controllers
             return note.ToActionResult();
         }
 
+        [HttpGet("bin")]
+        public async Task<IActionResult> GetBinByUserIdAsync()
+        {
+            var notes = await _notesService.GetBinByUserIdAsync();
+
+            return notes.ToActionResult();
+        }
+
         [HttpPatch("bin/{id}")]
         public async Task<IActionResult> MoveToBinAsync(long id)
         {
