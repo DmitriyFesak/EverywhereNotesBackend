@@ -14,7 +14,7 @@ namespace EverywhereNotes.Models.Entities
 
         public DateTime? LastUpdateDateTime { get; set; }
 
-        public bool IsInTrash { get; set; } = false;
+        public bool MovedToBin { get; set; } = false;
 
         public long userId { get; init; }
 

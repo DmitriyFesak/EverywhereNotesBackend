@@ -51,18 +51,18 @@ namespace EverywhereNotes.Controllers
             return note.ToActionResult();
         }
 
-        [HttpPatch("trash/{id}")]
-        public async Task<IActionResult> MoveToTrashAsync(long id)
+        [HttpPatch("bin/{id}")]
+        public async Task<IActionResult> MoveToBinAsync(long id)
         {
-            var note = await _notesService.MoveToTrashAsync(id);
+            var note = await _notesService.MoveToBinAsync(id);
 
             return note.ToActionResult();
         }
 
         [HttpPatch("restore/{id}")]
-        public async Task<IActionResult> MoveFromTrashAsync(long id)
+        public async Task<IActionResult> MoveFromBinAsync(long id)
         {
-            var note = await _notesService.RestoreFromTrashAsync(id);
+            var note = await _notesService.RestoreFromBinAsync(id);
 
             return note.ToActionResult();
         }

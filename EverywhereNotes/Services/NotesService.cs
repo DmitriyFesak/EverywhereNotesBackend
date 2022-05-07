@@ -111,7 +111,7 @@ namespace EverywhereNotes.Services
             return Result<List<NoteResponse>>.GetSuccess(_mapper.Map<List<NoteResponse>>(foundNotes));
         }
 
-        public async Task<Result<NoteResponse>> MoveToTrashAsync(long id)
+        public async Task<Result<NoteResponse>> MoveToBinAsync(long id)
         {
             try
             {
@@ -127,12 +127,12 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
                 }
 
-                if (foundNote.IsInTrash)
+                if (foundNote.MovedToBin)
                 {
-                    return Result<NoteResponse>.GetError(ErrorCode.Conflict, "Note with this id is already in trash!");
+                    return Result<NoteResponse>.GetError(ErrorCode.Conflict, "Note with this id is already in bin!");
                 }
 
-                foundNote.IsInTrash = true;
+                foundNote.MovedToBin = true;
 
                 _unitOfWork.NotesRepository.Update(foundNote);
                 await _unitOfWork.CommitAsync();
@@ -147,7 +147,7 @@ namespace EverywhereNotes.Services
             }
         }
 
-        public async Task<Result<NoteResponse>> RestoreFromTrashAsync(long id)
+        public async Task<Result<NoteResponse>> RestoreFromBinAsync(long id)
         {
             try
             {
@@ -163,12 +163,12 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
                 }
 
-                if (!foundNote.IsInTrash)
+                if (!foundNote.MovedToBin)
                 {
-                    return Result<NoteResponse>.GetError(ErrorCode.Conflict, "Note with this id is not in trash!");
+                    return Result<NoteResponse>.GetError(ErrorCode.Conflict, "Note with this id is not in bin!");
                 }
 
-                foundNote.IsInTrash = false;
+                foundNote.MovedToBin = false;
 
                 _unitOfWork.NotesRepository.Update(foundNote);
                 await _unitOfWork.CommitAsync();
