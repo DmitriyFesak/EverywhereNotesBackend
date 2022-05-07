@@ -36,7 +36,7 @@ namespace EverywhereNotes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(CreateNoteRequest request)
+        public async Task<IActionResult> PostAsync(NoteRequest request)
         {
             var note = await _notesService.AddAsync(request);
 
@@ -44,9 +44,9 @@ namespace EverywhereNotes.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(long id, [FromBody] UpdateNoteRequest request)
+        public async Task<IActionResult> PutAsync(long id, NoteRequest request)
         {
-            var note = await _notesService.UpdateAsync(request);
+            var note = await _notesService.UpdateAsync(id, request);
 
             return note.ToActionResult();
         }

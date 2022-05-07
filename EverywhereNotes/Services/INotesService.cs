@@ -14,7 +14,7 @@ namespace EverywhereNotes.Services
 
         public Task<Result<NoteResponse>> GetByIdAsync(long id);
 
-        public Task<Result<NoteResponse>> UpdateAsync(UpdateNoteRequest note);
+        public Task<Result<NoteResponse>> UpdateAsync(long id, CreateNoteRequest note);
 
         public Task<Result<NoteResponse>> MoveToTrashAsync(long id);
         

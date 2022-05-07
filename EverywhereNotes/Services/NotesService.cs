@@ -163,7 +163,7 @@ namespace EverywhereNotes.Services
             }
         }
 
-        public async Task<Result<NoteResponse>> UpdateAsync(UpdateNoteRequest note)
+        public async Task<Result<NoteResponse>> UpdateAsync(long id, CreateNoteRequest note)
         {
             try
             {
@@ -172,7 +172,7 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note request is null!");
                 }
 
-                var foundNote = await _unitOfWork.NotesRepository.GetByIdAsync(note.Id);
+                var foundNote = await _unitOfWork.NotesRepository.GetByIdAsync(id);
 
                 if (foundNote == null)
                 {
