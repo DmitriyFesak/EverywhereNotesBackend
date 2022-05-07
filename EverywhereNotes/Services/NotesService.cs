@@ -21,7 +21,7 @@ namespace EverywhereNotes.Services
             _mapper = mapper;
         }
 
-        public async Task<Result<NoteResponse>> AddAsync(CreateNoteRequest note)
+        public async Task<Result<NoteResponse>> AddAsync(NoteRequest note)
         {
             try
             {
@@ -62,6 +62,11 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note with this id was not found!");
                 }
 
+                if (foundNote.userId != _currentUserService.UserId)
+                {
+                    return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
+                }
+
                 await _unitOfWork.NotesRepository.DeleteAsync(id);
                 await _unitOfWork.CommitAsync();
 
@@ -82,6 +87,11 @@ namespace EverywhereNotes.Services
             if (foundNote == null)
             {
                 return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note with this id was not found!");
+            }
+
+            if (foundNote.userId != _currentUserService.UserId)
+            {
+                return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
             }
 
             return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
@@ -110,6 +120,11 @@ namespace EverywhereNotes.Services
                 if (foundNote == null)
                 {
                     return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note with this id was not found!");
+                }
+
+                if (foundNote.userId != _currentUserService.UserId)
+                {
+                    return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
                 }
 
                 if (foundNote.IsInTrash)
@@ -143,6 +158,11 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note with this id was not found!");
                 }
 
+                if (foundNote.userId != _currentUserService.UserId)
+                {
+                    return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
+                }
+
                 if (!foundNote.IsInTrash)
                 {
                     return Result<NoteResponse>.GetError(ErrorCode.Conflict, "Note with this id is not in trash!");
@@ -163,7 +183,7 @@ namespace EverywhereNotes.Services
             }
         }
 
-        public async Task<Result<NoteResponse>> UpdateAsync(long id, CreateNoteRequest note)
+        public async Task<Result<NoteResponse>> UpdateAsync(long id, NoteRequest note)
         {
             try
             {
@@ -177,6 +197,11 @@ namespace EverywhereNotes.Services
                 if (foundNote == null)
                 {
                     return Result<NoteResponse>.GetError(ErrorCode.NotFound, "Note was not found!");
+                }
+
+                if (foundNote.userId != _currentUserService.UserId)
+                {
+                    return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
                 }
 
                 foundNote.Title = note.Title;

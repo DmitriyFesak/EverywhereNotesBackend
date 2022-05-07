@@ -1,6 +1,6 @@
 ﻿namespace EverywhereNotes.Contracts.Requests
 {
-    public class CreateNoteRequest
+    public class NoteRequest
     {
         public string Title { get; set; }
 

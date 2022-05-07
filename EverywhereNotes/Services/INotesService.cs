@@ -6,7 +6,7 @@ namespace EverywhereNotes.Services
 {
     public interface INotesService
     {
-        public Task<Result<NoteResponse>> AddAsync(CreateNoteRequest note);
+        public Task<Result<NoteResponse>> AddAsync(NoteRequest note);
 
         public Task<Result<NoteResponse>> DeleteAsync(long id);
 
@@ -14,7 +14,7 @@ namespace EverywhereNotes.Services
 
         public Task<Result<NoteResponse>> GetByIdAsync(long id);
 
-        public Task<Result<NoteResponse>> UpdateAsync(long id, CreateNoteRequest note);
+        public Task<Result<NoteResponse>> UpdateAsync(long id, NoteRequest note);
 
         public Task<Result<NoteResponse>> MoveToTrashAsync(long id);
         
