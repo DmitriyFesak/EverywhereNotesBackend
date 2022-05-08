@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace EverywhereNotes.Helpers
 {
-    public class PasswordHelper
+    public static class PasswordHelper
     {
         /// <summary>
         /// At least eight characters, at least one uppercase letter, one lowercase letter one number and special character
         /// </summary>
-        private const string _pattern = @"^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_!%^&-+()*=])(?=.*[0-9]).*$";
+        public const string PasswordPattern = @"^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_!%^&-+()*=])(?=.*[0-9]).*$";
 
         public static string GenerateSalt()
         {
@@ -23,13 +23,6 @@ namespace EverywhereNotes.Helpers
             var result = mySHA256.ComputeHash(data);
 
             return BitConverter.ToString(result).Replace("-", "").ToLower();
-        }
-
-        public static bool PasswordValidation(string password)
-        {
-            if (password is null)
-                return false;
-            return Regex.IsMatch(password, _pattern);
         }
     }
 }

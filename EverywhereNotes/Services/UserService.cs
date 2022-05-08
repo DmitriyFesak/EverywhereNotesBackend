@@ -28,7 +28,7 @@ namespace EverywhereNotes.Services
             
             if (user == null)
             {
-                return Result<AuthSuccessResponse>.GetError(ErrorCode.NotFound, "User not found!");
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.NotFound, "User is not found!");
             }
 
             var passwordHash = PasswordHelper.HashPassword(request.Password, user.Salt);
@@ -37,7 +37,7 @@ namespace EverywhereNotes.Services
 
             if (!isAuthorized)
             {
-                return Result<AuthSuccessResponse>.GetError(ErrorCode.Unauthorized, "Wrong password!");
+                return Result<AuthSuccessResponse>.GetError(ErrorCode.Unauthorized, "Password is wrong!");
             }
             else
             {
@@ -80,12 +80,6 @@ namespace EverywhereNotes.Services
             if (isEmailTaken)
             {
                 return Result<AuthSuccessResponse>.GetError(ErrorCode.Conflict, "This email is already used!");
-            }
-
-            //TODO: Get rid of this after adding validation
-            if (request.Password != request.ConfirmPassword)
-            {
-                return Result<AuthSuccessResponse>.GetError(ErrorCode.Conflict, "Passwords do not match!");
             }
 
             try
