@@ -2,6 +2,7 @@
 using EverywhereNotes.Contracts.Responses;
 using EverywhereNotes.Helpers;
 using EverywhereNotes.Models.Entities;
+using EverywhereNotes.Models.Enums;
 using EverywhereNotes.Models.ResultModel;
 using EverywhereNotes.Repositories;
 

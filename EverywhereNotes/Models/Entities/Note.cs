@@ -1,4 +1,4 @@
-﻿using EverywhereNotes.Contracts.Enums;
+﻿using EverywhereNotes.Models.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EverywhereNotes.Models.Entities
@@ -11,7 +11,7 @@ namespace EverywhereNotes.Models.Entities
 
         public string Content { get; set; }
       
-        public NoteColors Color { get; set; }
+        public NoteColor Color { get; set; }
 
         public DateTime CreationDateTime { get; init; }
 

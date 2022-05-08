@@ -1,6 +1,6 @@
-﻿namespace EverywhereNotes.Contracts.Enums
+﻿namespace EverywhereNotes.Models.Enums
 {
-    public enum NoteColors
+    public enum NoteColor
     {
         Black,
         Red,

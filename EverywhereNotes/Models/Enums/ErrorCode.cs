@@ -1,4 +1,4 @@
-﻿namespace EverywhereNotes.Models.ResultModel
+﻿namespace EverywhereNotes.Models.Enums
 {
     public enum ErrorCode
     {

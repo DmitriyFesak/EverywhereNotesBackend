@@ -1,4 +1,6 @@
-﻿namespace EverywhereNotes.Models.ResultModel
+﻿using EverywhereNotes.Models.Enums;
+
+namespace EverywhereNotes.Models.ResultModel
 {
     public class ErrorData
     {

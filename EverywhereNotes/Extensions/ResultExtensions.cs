@@ -1,4 +1,5 @@
 ﻿using EverywhereNotes.Contracts.Responses;
+using EverywhereNotes.Models.Enums;
 using EverywhereNotes.Models.ResultModel;
 using Microsoft.AspNetCore.Mvc;
 
