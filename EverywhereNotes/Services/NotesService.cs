@@ -36,7 +36,7 @@ namespace EverywhereNotes.Services
                 {
                     Title = note.Title,
                     Content = note.Content,
-                    Color = note.Color.ToEnum<NoteColor>(),
+                    Color = note.Color,
                     CreationDateTime = DateTime.Now,
                     userId = _currentUserService.UserId
                 };
@@ -228,7 +228,7 @@ namespace EverywhereNotes.Services
 
                 foundNote.Title = note.Title;
                 foundNote.Content = note.Content;
-                foundNote.Color = note.Color.ToEnum<NoteColor>();
+                foundNote.Color = note.Color;
                 foundNote.LastUpdateDateTime = DateTime.Now;
 
                 _unitOfWork.NotesRepository.Update(foundNote);

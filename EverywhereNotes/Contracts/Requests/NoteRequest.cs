@@ -1,4 +1,6 @@
-﻿namespace EverywhereNotes.Contracts.Requests
+﻿using EverywhereNotes.Models.Enums;
+
+namespace EverywhereNotes.Contracts.Requests
 {
     public class NoteRequest
     {
@@ -6,6 +8,6 @@
 
         public string Content { get; set; }
 
-        public string Color { get; set; }
+        public NoteColor Color { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace EverywhereNotes.Validators
         {
             RuleFor(note => note.Title).MaximumLength(100);
             RuleFor(note => note.Content).NotEmpty().MaximumLength(4000);
-            RuleFor(note => note.Color).NotEmpty().IsEnumName(typeof(NoteColor), false);
+            RuleFor(note => note.Color).NotEmpty().IsInEnum();
         }
     }
 }
