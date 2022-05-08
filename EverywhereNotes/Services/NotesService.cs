@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using EverywhereNotes.Contracts.Enums;
 using EverywhereNotes.Contracts.Requests;
 using EverywhereNotes.Contracts.Responses;
+using EverywhereNotes.Extensions;
 using EverywhereNotes.Models.Entities;
 using EverywhereNotes.Models.ResultModel;
 using EverywhereNotes.Repositories;
@@ -34,6 +36,7 @@ namespace EverywhereNotes.Services
                 {
                     Title = note.Title,
                     Content = note.Content,
+                    Color = note.Color.ToEnum<NoteColors>(),
                     CreationDateTime = DateTime.Now,
                     userId = _currentUserService.UserId
                 };
@@ -65,6 +68,11 @@ namespace EverywhereNotes.Services
                 if (foundNote.userId != _currentUserService.UserId)
                 {
                     return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
+                }
+
+                if (!foundNote.MovedToBin)
+                {
+                    return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Note can be deleted only from bin!");
                 }
 
                 await _unitOfWork.NotesRepository.DeleteAsync(id);
@@ -220,6 +228,7 @@ namespace EverywhereNotes.Services
 
                 foundNote.Title = note.Title;
                 foundNote.Content = note.Content;
+                foundNote.Color = note.Color.ToEnum<NoteColors>();
                 foundNote.LastUpdateDateTime = DateTime.Now;
 
                 _unitOfWork.NotesRepository.Update(foundNote);
