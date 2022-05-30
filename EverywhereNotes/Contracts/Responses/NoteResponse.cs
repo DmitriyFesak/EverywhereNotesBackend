@@ -1,4 +1,6 @@
-﻿namespace EverywhereNotes.Contracts.Responses
+﻿using EverywhereNotes.Models.Enums;
+
+namespace EverywhereNotes.Contracts.Responses
 {
     public class NoteResponse
     {
@@ -8,7 +10,7 @@
 
         public string Content { get; set; }
 
-        public string Color { get; set; }
+        public NoteColor Color { get; set; }
 
         public DateTime CreationDateTime { get; init; }
 
