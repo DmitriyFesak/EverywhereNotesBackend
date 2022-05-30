@@ -10,7 +10,6 @@
         Orange,
         Pink,
         Purple,
-        Grey,
         LightBlue,
         LightGreen
     }
