@@ -13,14 +13,11 @@ namespace EverywhereNotes.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IMapper _mapper;
 
-        public NotesService(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
-            IMapper mapper)
+        public NotesService(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
-            _mapper = mapper;
         }
 
         public async Task<Result<NoteResponse>> AddAsync(NoteRequest note)
@@ -32,19 +29,10 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.ValidationError, "Note is null!");
                 }
 
-                var createdNote = new Note
-                {
-                    Title = note.Title,
-                    Content = note.Content,
-                    Color = note.Color,
-                    CreationDateTime = DateTime.Now,
-                    userId = _currentUserService.UserId
-                };
-
-                await _unitOfWork.NotesRepository.AddAsync(createdNote);
+                var noteResponse = await _unitOfWork.NotesRepository.AddAsync(note);
                 await _unitOfWork.CommitAsync();
 
-                return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(createdNote));
+                return Result<NoteResponse>.GetSuccess(noteResponse);
             }
             catch
             {
@@ -70,7 +58,7 @@ namespace EverywhereNotes.Services
                     return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
                 }
 
-                if (!foundNote.MovedToBin)
+                                if (!foundNote.MovedToBin)
                 {
                     return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Note can be deleted only from bin!");
                 }
@@ -78,7 +66,7 @@ namespace EverywhereNotes.Services
                 await _unitOfWork.NotesRepository.DeleteAsync(id);
                 await _unitOfWork.CommitAsync();
 
-                return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
+                return Result<NoteResponse>.GetSuccess(foundNote);
             }
             catch
             {
@@ -99,7 +87,7 @@ namespace EverywhereNotes.Services
                 return Result<List<NoteResponse>>.GetError(ErrorCode.NotFound, "Bin is empty!");
             }
 
-            return Result<List<NoteResponse>>.GetSuccess(_mapper.Map<List<NoteResponse>>(foundNotes));
+            return Result<List<NoteResponse>>.GetSuccess(foundNotes);
         }
 
         public async Task<Result<NoteResponse>> GetByIdAsync(long id)
@@ -116,7 +104,7 @@ namespace EverywhereNotes.Services
                 return Result<NoteResponse>.GetError(ErrorCode.Forbidden, "Only owner can reach the note!");
             }
 
-            return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
+            return Result<NoteResponse>.GetSuccess(foundNote);
         }
 
         public async Task<Result<List<NoteResponse>>> GetByUserIdAsync()
@@ -130,7 +118,7 @@ namespace EverywhereNotes.Services
                 return Result<List<NoteResponse>>.GetError(ErrorCode.NotFound, "Notes with this user id were not found!");
             }
 
-            return Result<List<NoteResponse>>.GetSuccess(_mapper.Map<List<NoteResponse>>(foundNotes));
+            return Result<List<NoteResponse>>.GetSuccess(foundNotes);
         }
 
         public async Task<Result<NoteResponse>> MoveToBinAsync(long id)
@@ -156,10 +144,10 @@ namespace EverywhereNotes.Services
 
                 foundNote.MovedToBin = true;
 
-                _unitOfWork.NotesRepository.Update(foundNote);
+                await _unitOfWork.NotesRepository.UpdateAsync(foundNote);
                 await _unitOfWork.CommitAsync();
 
-                return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
+                return Result<NoteResponse>.GetSuccess(foundNote);
             }
             catch
             {
@@ -192,10 +180,10 @@ namespace EverywhereNotes.Services
 
                 foundNote.MovedToBin = false;
 
-                _unitOfWork.NotesRepository.Update(foundNote);
+                await _unitOfWork.NotesRepository.UpdateAsync(foundNote);
                 await _unitOfWork.CommitAsync();
 
-                return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
+                return Result<NoteResponse>.GetSuccess(foundNote);
             }
             catch
             {
@@ -229,12 +217,11 @@ namespace EverywhereNotes.Services
                 foundNote.Title = note.Title;
                 foundNote.Content = note.Content;
                 foundNote.Color = note.Color;
-                foundNote.LastUpdateDateTime = DateTime.Now;
 
-                _unitOfWork.NotesRepository.Update(foundNote);
+                await _unitOfWork.NotesRepository.UpdateAsync(foundNote);
                 await _unitOfWork.CommitAsync();
 
-                return Result<NoteResponse>.GetSuccess(_mapper.Map<NoteResponse>(foundNote));
+                return Result<NoteResponse>.GetSuccess(foundNote);
             }
             catch
             {

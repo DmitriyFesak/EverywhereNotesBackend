@@ -1,19 +1,20 @@
-﻿using EverywhereNotes.Models.Entities;
+﻿using EverywhereNotes.Contracts.Requests;
+using EverywhereNotes.Contracts.Responses;
 
 namespace EverywhereNotes.Repositories
 {
     public interface INotesRepository
     {
-        public Task AddAsync(Note note);
+        public Task<NoteResponse> AddAsync(NoteRequest note);
 
         public Task DeleteAsync(long id);
 
-        public Task<List<Note>> GetByUserIdAsync(long userId);
+        public Task<List<NoteResponse>> GetByUserIdAsync(long userId);
         
-        public Task<List<Note>> GetBinByUserIdAsync(long userId);
+        public Task<List<NoteResponse>> GetBinByUserIdAsync(long userId);
 
-        public Task<Note?> GetByIdAsync(long id);
+        public Task<NoteResponse?> GetByIdAsync(long id);
 
-        public void Update(Note note);
+        public Task UpdateAsync(NoteResponse note);
     }
 }

@@ -12,6 +12,8 @@ namespace EverywhereNotes.Contracts.Responses
 
         public NoteColor Color { get; set; }
 
+        public bool MovedToBin { get; set; }
+
         public DateTime CreationDateTime { get; init; }
 
         public DateTime? LastUpdateDateTime { get; set; }
